@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/GenAbnormalityXMLs/static/css/main.f48fe6c6.css",
+    "main.js": "/GenAbnormalityXMLs/static/js/main.6b49713d.js",
+    "static/js/453.4e1a4de5.chunk.js": "/GenAbnormalityXMLs/static/js/453.4e1a4de5.chunk.js",
+    "index.html": "/GenAbnormalityXMLs/index.html",
+    "main.f48fe6c6.css.map": "/GenAbnormalityXMLs/static/css/main.f48fe6c6.css.map",
+    "main.6b49713d.js.map": "/GenAbnormalityXMLs/static/js/main.6b49713d.js.map",
+    "453.4e1a4de5.chunk.js.map": "/GenAbnormalityXMLs/static/js/453.4e1a4de5.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f48fe6c6.css",
+    "static/js/main.6b49713d.js"
+  ]
+}
