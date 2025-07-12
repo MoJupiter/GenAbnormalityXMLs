@@ -4,6 +4,17 @@ import './Abnormality.css';
 const ConverRWBPType = (type: RWBP) =>{
     return(type == RWBP.R ? ('R') : type == RWBP.W ? 'W' : type == RWBP.B ? ('B') : type == RWBP.P ? ('P') : 'R');
 }
+interface AbnName{
+  en: string;
+  ja: string;
+}
+  const Adjective = ([{en:'Laugh', ja:'笑う死体の'}, {en:'Silent', ja:'静かな'}, {en:'Blue', ja:'青い'}, {en:'Melting', ja:'溶ける'}]);
+  const Alphabet = (['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']);
+  const Name = ([{en:'Mountain', ja:'山'}, {en:'Ster', ja:'星'}, {en:'Orch', ja:'オーケストラ'}, {en:'Love', ja:'愛'}]);
+  const Condition = ([{en:'Mountain', ja:'山'}, {en:'Ster', ja:'星'}, {en:'Orch', ja:'オーケストラ'}, {en:'Love', ja:'愛'}]);
+  const Happen = ([{en:'Mountain', ja:'山'}, {en:'Ster', ja:'星'}, {en:'Orch', ja:'オーケストラ'}, {en:'Love', ja:'愛'}]);
+  const Desk = ([{en:'Mountain', ja:'山'}, {en:'Ster', ja:'星'}, {en:'Orch', ja:'オーケストラ'}, {en:'Love', ja:'愛'}]);
+  const RiskLevel = (['ZAYIN', 'TETH', 'HE', 'WAW', 'ALEPH']);
 interface AbnoXMLs{
     stat: string;
     creature: string;
@@ -309,64 +320,69 @@ interface RWBPInfomation {
 }
 
 // ヘルパー関数: Information[] の初期値
-const initialInformation: Information = { openLevel: 0, data: '' };
+const initialInformation: Information = { openLevel: 1, data: '' };
 const initialInformationArray: Information[] = [structuredClone(initialInformation)];
 
 // ヘルパー関数: LiskLevel[] の初期値
-const initialLiskLevel: LiskLevel = { openLevel: 0, data: '', level: 0 };
+const initialLiskLevel: LiskLevel = { openLevel: 1, data: '', level: 1 };
 const initialLiskLevelArray: LiskLevel[] = [structuredClone(initialLiskLevel)];
 
 // ヘルパー関数: RWBPInfomation の初期値
-const initialRWBPInformation: RWBPInfomation = { R: 0, W: 0, B: 0, P: 0 };
+const initialRWBPInformation: RWBPInfomation = { R: 1, W: 1, B: 1, P: 1 };
 
 // ヘルパー関数: Damage の初期値
-const initialDamage: Damage = { type: RWBP.R, min: 0, max: 0 };
+const initialDamage: Damage = { type: RWBP.R, min: 1, max: 1 };
 
 // Abnormality の初期状態
-const initialAbnormality: Abnormality = {
-  basicInfo: {
-    id: 0,
-    name_en: '',
-    name_ja: '',
-    codeNo: structuredClone(initialInformationArray),
-    name: structuredClone(initialInformationArray),
-    portrait: structuredClone(initialInformationArray),
-    riskLevel: structuredClone(initialLiskLevelArray),
-    openText: structuredClone(initialInformationArray),
-    desc: structuredClone(initialInformationArray),
-    specialTips: [{ openLevel: 1, data: "", cost: 0 }],
-  },
-  skillInfo: {
-    workProb: {
-      openCost: 0,
-      Level1: structuredClone(initialRWBPInformation),
-      Level2: structuredClone(initialRWBPInformation),
-      Level3: structuredClone(initialRWBPInformation),
-      Level4: structuredClone(initialRWBPInformation),
-      Level5: structuredClone(initialRWBPInformation),
+const initialAbnormality = () => {
+  let adjective_index = Math.floor(Math.random()*(Adjective.length));
+  let name_index = Math.floor(Math.random()*(Adjective.length));
+  let risk_level = Math.floor(Math.random()*(RiskLevel.length));
+  return {
+    basicInfo: {
+      id: parseInt(`${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}`),
+      name_en: Adjective[adjective_index].en + Name[name_index].en,
+      name_ja: Adjective[adjective_index].ja + Name[name_index].ja,
+      codeNo: [structuredClone({openLevel: Math.floor(Math.random()*2+1), data: `${(Alphabet[Math.floor(Math.random()*Alphabet.length)])}${Math.floor(Math.random()*9)}${Math.floor(Math.random()*9)}-${Math.floor(Math.random()*9)}${Math.floor(Math.random()*9)}${Math.floor(Math.random()*9)}-${Math.floor(Math.random()*9)}${Math.floor(Math.random()*9)}`})],
+      name: [structuredClone({openLevel: Math.floor(Math.random()*2+1), data:Adjective[adjective_index].ja + Name[name_index].ja})],
+      portrait: [structuredClone({openLevel: Math.floor(Math.random()*2+3), data:Adjective[adjective_index].ja + Name[name_index].ja})],
+      riskLevel: [structuredClone({openLevel: 4, data: RiskLevel[risk_level], level: risk_level+1})],
+      openText: [structuredClone({openLevel: 1, data:''})],
+      desc: [structuredClone(`${Condition[Math.floor(Math.random()*Condition.length)]}${Happen[Math.floor(Math.random()*Happen.length)]}`)],
+      specialTips: [{ openLevel: 1, data: "", cost: 1 }],
     },
-    narration_start: '',
-    narration_move: '',
-    narration: structuredClone(initialInformationArray),
-    qliphoth: 0,
-    feelingStateCubeBounds: { bad: 0, norm: 0, good: 0 },
-    workSpeed: 0,
-    workDamage: structuredClone(initialDamage),
-    workCooltime: 0,
-    observeBonus: [{ type: ObserveBonusType.prob, data: 0, level: 1 }, { type: ObserveBonusType.prob, data: 0, level: 2 }, { type: ObserveBonusType.prob, data: 0, level: 3 }, { type: ObserveBonusType.prob, data: 0, level: 4 }],
-    armor: { id: 0, level: 0, cost: 0 },
-    weapon: { id: 0, level: 0, cost: 0 },
-    gift: { id: 0, level: 0, prob: 0 },
-  },
-  escapeInfo: {
-    escapable: false,
-    defense: { data: structuredClone(initialRWBPInformation), cost: 0 },
-    specialDamage: [structuredClone(initialDamage)],
-    HP: 0,
-    speed: 0,
-    animPrefab: '',
-  },
-};
+    skillInfo: {
+      workProb: {
+        openCost: 1,
+        Level1: structuredClone(initialRWBPInformation),
+        Level2: structuredClone(initialRWBPInformation),
+        Level3: structuredClone(initialRWBPInformation),
+        Level4: structuredClone(initialRWBPInformation),
+        Level5: structuredClone(initialRWBPInformation),
+      },
+      narration_start: '',
+      narration_move: '',
+      narration: structuredClone(initialInformationArray),
+      qliphoth: 1,
+      feelingStateCubeBounds: { bad: 1, norm: 1, good: 1 },
+      workSpeed: 1,
+      workDamage: structuredClone(initialDamage),
+      workCooltime: 1,
+      observeBonus: [{ type: ObserveBonusType.prob, data: 1, level: 1 }, { type: ObserveBonusType.prob, data: 1, level: 2 }, { type: ObserveBonusType.prob, data: 1, level: 3 }, { type: ObserveBonusType.prob, data: 1, level: 4 }],
+      armor: { id: 1, level: 1, cost: 1 },
+      weapon: { id: 1, level: 1, cost: 1 },
+      gift: { id: 1, level: 1, prob: 1 },
+    },
+    escapeInfo: {
+      escapable: false,
+      defense: { data: structuredClone(initialRWBPInformation), cost: 1 },
+      specialDamage: [structuredClone(initialDamage)],
+      HP: 1,
+      speed: 1,
+      animPrefab: '',
+    },
+  }
+}
 
 const AbnormalityForm: React.FC = () => {
   const [abnormality, setAbnormality] = useState<Abnormality>(initialAbnormality);
@@ -469,22 +485,22 @@ const AbnormalityForm: React.FC = () => {
       case 'portrait':
       case 'openText':
       case 'desc':
-        newItem = { openLevel: 0, data: '' };
+        newItem = { openLevel: 1, data: '' };
         break;
       case 'riskLevel':
-        newItem = { openLevel: 0, data: '', level: 0 };
+        newItem = { openLevel: 1, data: '', level: 1 };
         break;
       case 'specialTips':
-        newItem = { data: { openLevel: 0, data: '' }, cost: 0 };
+        newItem = { data: { openLevel: 1, data: '' }, cost: 1 };
         break;
       case 'narration':
         newItem = '';
         break;
       case 'observeBonus':
-        newItem = { type: ObserveBonusType.prob, data: 0, level: 0 };
+        newItem = { type: ObserveBonusType.prob, data: 1, level: 1 };
         break;
       case 'specialDamage':
-        newItem = { type: RWBP.R, min: 0, max: 0 };
+        newItem = { type: RWBP.R, min: 1, max: 1 };
         break;
       default:
         console.warn('未対応のarrayName:', arrayName);
