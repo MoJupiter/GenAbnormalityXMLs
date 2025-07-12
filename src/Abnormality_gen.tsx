@@ -8,11 +8,11 @@ interface AbnName{
   en: string;
   ja: string;
 }
-  const Adjective = ([{en:'Laugh', ja:'笑う死体の'}, {en:'Silent', ja:'静かな'}, {en:'Blue', ja:'青い'}, {en:'Melting', ja:'溶ける'}]);
+  const Adjective = ([{en:'Laugh', ja:'笑う死体の'}, {en:'NothingThere', ja:'何もない'}, {en:'Silent', ja:'静かな'}, {en:'Blue', ja:'青い'}, {en:'Melting', ja:'溶ける'}]);
   const Alphabet = (['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']);
-  const Name = ([{en:'Mountain', ja:'山'}, {en:'Ster', ja:'星'}, {en:'Orch', ja:'オーケストラ'}, {en:'Love', ja:'愛'}]);
-  const Condition = ([{en:'Mountain', ja:'山'}, {en:'Ster', ja:'星'}, {en:'Orch', ja:'オーケストラ'}, {en:'Love', ja:'愛'}]);
-  const Happen = ([{en:'Mountain', ja:'山'}, {en:'Ster', ja:'星'}, {en:'Orch', ja:'オーケストラ'}, {en:'Love', ja:'愛'}]);
+  const Name = ([{en:'Mountain', ja:'山'}, {en:'', ja:''}, {en:'Ster', ja:'星'}, {en:'Orch', ja:'オーケストラ'}, {en:'Love', ja:'愛'}]);
+  const Condition = ([{en:'作業結果が良い場合', ja:'作業結果が良い場合'}, {en:'作業結果が普通の場合', ja:'作業結果が普通の場合'}, {en:'作業結果が悪い、または普通の場合', ja:'作業結果が悪い、または普通の場合'}, {en:'職員がどこかで死んだとき', ja:'職員がどこかで死んだとき'}]);
+  const Happen = ([{en:'クリフォトカウンターが1減る。', ja:'クリフォトカウンターが1減る。'}, {en:'クリフォトカウンターが1増える。', ja:'クリフォトカウンターが1増える。'}]);
   const Desk = ([{en:'Mountain', ja:'山'}, {en:'Ster', ja:'星'}, {en:'Orch', ja:'オーケストラ'}, {en:'Love', ja:'愛'}]);
   const RiskLevel = (['ZAYIN', 'TETH', 'HE', 'WAW', 'ALEPH']);
 interface AbnoXMLs{
@@ -22,9 +22,11 @@ interface AbnoXMLs{
     info: string;
 }
 const Conver2XML = (abn: Abnormality) =>{
-    const bonuss = abn.skillInfo.observeBonus.map((output, index) => {
-        return `<observeBonus level="${output.level}" type="${output.type}">${output.data}</observeBonus>\n`;
-    });
+  let bonuss = "";
+  for(let i = 0; i < abn.skillInfo.observeBonus.length; i++){
+      const output = abn.skillInfo.observeBonus[i];
+        bonuss+=`<observeBonus level="${output.level}" type="${output.type==0 ? 'prob' : 'speed'}">${output.data}</observeBonus>\n    `;
+  }
     const cares = abn.basicInfo.specialTips.map((output, index) => {
         return `<observeElement name="care_${index}" cost="${output.cost}" />\n`;
     });
@@ -62,37 +64,37 @@ const Conver2XML = (abn: Abnormality) =>{
     
     let stat = `<?xml version=\"1.0\"?\>
 <creature\>
-<script>Well</script\>
+<script>${abn.basicInfo.name_en}</script\>
 <stat\>
-    <riskLevel>${abn.basicInfo.riskLevel}</riskLevel>
+    <riskLevel>${abn.basicInfo.riskLevel[0].level}</riskLevel>
     <maxWorkCount>2</maxWorkCount>
-<workProb type="R\">
-    <prob level="1\">${abn.skillInfo.workProb.Level1.R}</prob>
-    <prob level="2\">${abn.skillInfo.workProb.Level2.R}</prob>
-    <prob level="3\">${abn.skillInfo.workProb.Level3.R}</prob>
-    <prob level="4\">${abn.skillInfo.workProb.Level4.R}</prob>
-    <prob level="5\">${abn.skillInfo.workProb.Level5.R}</prob>
+    <workProb type="R\">
+      <prob level="1\">${abn.skillInfo.workProb.Level1.R}</prob>
+      <prob level="2\">${abn.skillInfo.workProb.Level2.R}</prob>
+      <prob level="3\">${abn.skillInfo.workProb.Level3.R}</prob>
+      <prob level="4\">${abn.skillInfo.workProb.Level4.R}</prob>
+      <prob level="5\">${abn.skillInfo.workProb.Level5.R}</prob>
     </workProb\>
     <workProb type="W">
-    <prob level="1">${abn.skillInfo.workProb.Level1.W}</prob>
-    <prob level="2">${abn.skillInfo.workProb.Level2.W}</prob>
-    <prob level="3">${abn.skillInfo.workProb.Level3.W}</prob>
-    <prob level="4">${abn.skillInfo.workProb.Level4.W}</prob>
-    <prob level="5">${abn.skillInfo.workProb.Level5.W}</prob>
+      <prob level="1">${abn.skillInfo.workProb.Level1.W}</prob>
+      <prob level="2">${abn.skillInfo.workProb.Level2.W}</prob>
+      <prob level="3">${abn.skillInfo.workProb.Level3.W}</prob>
+      <prob level="4">${abn.skillInfo.workProb.Level4.W}</prob>
+      <prob level="5">${abn.skillInfo.workProb.Level5.W}</prob>
     </workProb>
     <workProb type="B">
-    <prob level="1">${abn.skillInfo.workProb.Level1.B}</prob>
-    <prob level="2">${abn.skillInfo.workProb.Level2.B}</prob>
-    <prob level="3">${abn.skillInfo.workProb.Level3.B}</prob>
-    <prob level="4">${abn.skillInfo.workProb.Level4.B}</prob>
-    <prob level="5">${abn.skillInfo.workProb.Level5.B}</prob>
+      <prob level="1">${abn.skillInfo.workProb.Level1.B}</prob>
+      <prob level="2">${abn.skillInfo.workProb.Level2.B}</prob>
+      <prob level="3">${abn.skillInfo.workProb.Level3.B}</prob>
+      <prob level="4">${abn.skillInfo.workProb.Level4.B}</prob>
+      <prob level="5">${abn.skillInfo.workProb.Level5.B}</prob>
     </workProb>
     <workProb type="P">
-    <prob level="1">${abn.skillInfo.workProb.Level1.P}</prob>
-    <prob level="2">${abn.skillInfo.workProb.Level2.P}</prob>
-    <prob level="3">${abn.skillInfo.workProb.Level3.P}</prob>
-    <prob level="4">${abn.skillInfo.workProb.Level4.P}</prob>
-    <prob level="5">${abn.skillInfo.workProb.Level5.P}</prob>
+      <prob level="1">${abn.skillInfo.workProb.Level1.P}</prob>
+      <prob level="2">${abn.skillInfo.workProb.Level2.P}</prob>
+      <prob level="3">${abn.skillInfo.workProb.Level3.P}</prob>
+      <prob level="4">${abn.skillInfo.workProb.Level4.P}</prob>
+      <prob level="5">${abn.skillInfo.workProb.Level5.P}</prob>
     </workProb>
     <workCooltime>${abn.skillInfo.workCooltime}</workCooltime>
     <feelingStateCubeBounds>
@@ -128,7 +130,7 @@ const Conver2XML = (abn: Abnormality) =>{
     <escapeable>${abn.escapeInfo.escapable}</escapeable>
     <equipment level="${abn.skillInfo.armor.level}" cost="${abn.skillInfo.armor.cost}" equipId="${abn.skillInfo.armor.id}" />
     <equipment level="${abn.skillInfo.weapon.level}" cost="${abn.skillInfo.weapon.cost}" equipId="${abn.skillInfo.weapon.id}" />
-    <equipment level="${abn.skillInfo.gift.level}" cost="${abn.skillInfo.gift.prob}" equipId="${abn.skillInfo.gift.id}" />
+    <equipment level="${abn.skillInfo.gift.level}" prob="${abn.skillInfo.gift.prob}" equipId="${abn.skillInfo.gift.id}" />
     <qliphoth>${abn.skillInfo.qliphoth}</qliphoth>
 
 </stat>
@@ -144,7 +146,7 @@ const Conver2XML = (abn: Abnormality) =>{
     <edge node1="workspace" node2="inner" type="road" />
     <edge node1="creature" node2="workspace" type="road" />
 </graph>
-<anim prefab="Custom/${abn.escapeInfo.animPrefab}" x="-2" y="-2" />
+<anim prefab="Custom/${abn.basicInfo.name_en}Anim" x="-2" y="-2" />
 <portrait src="Unit/creature/magicalGirl" />
 </creature>`;
 
@@ -263,8 +265,8 @@ interface ObserveBonus {
     level: number;
 }
 enum ObserveBonusType {
-    prob,
-    speed,
+    prob=0,
+    speed=1,
 }
 interface Damage {
     type: RWBP;
@@ -328,19 +330,22 @@ const initialLiskLevel: LiskLevel = { openLevel: 1, data: '', level: 1 };
 const initialLiskLevelArray: LiskLevel[] = [structuredClone(initialLiskLevel)];
 
 // ヘルパー関数: RWBPInfomation の初期値
-const initialRWBPInformation: RWBPInfomation = { R: 1, W: 1, B: 1, P: 1 };
+const initialRWBPInformation: RWBPInfomation = { R: Math.floor(Math.random()*10)/10, W: Math.floor(Math.random()*10)/10, B: Math.floor(Math.random()*10)/10, P: Math.floor(Math.random()*10)/10};
 
 // ヘルパー関数: Damage の初期値
 const initialDamage: Damage = { type: RWBP.R, min: 1, max: 1 };
-
+const IDGen = () => {
+  return `${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}`;
+}
 // Abnormality の初期状態
 const initialAbnormality = () => {
   let adjective_index = Math.floor(Math.random()*(Adjective.length));
   let name_index = Math.floor(Math.random()*(Adjective.length));
   let risk_level = Math.floor(Math.random()*(RiskLevel.length));
+  let max_cube = Math.floor((Math.random()+2)*3);
   return {
     basicInfo: {
-      id: parseInt(`${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}${Math.floor(Math.random()*9)+1}`),
+      id: parseInt(IDGen()),
       name_en: Adjective[adjective_index].en + Name[name_index].en,
       name_ja: Adjective[adjective_index].ja + Name[name_index].ja,
       codeNo: [structuredClone({openLevel: Math.floor(Math.random()*2+1), data: `${(Alphabet[Math.floor(Math.random()*Alphabet.length)])}${Math.floor(Math.random()*9)}${Math.floor(Math.random()*9)}-${Math.floor(Math.random()*9)}${Math.floor(Math.random()*9)}${Math.floor(Math.random()*9)}-${Math.floor(Math.random()*9)}${Math.floor(Math.random()*9)}`})],
@@ -348,38 +353,38 @@ const initialAbnormality = () => {
       portrait: [structuredClone({openLevel: Math.floor(Math.random()*2+3), data:Adjective[adjective_index].ja + Name[name_index].ja})],
       riskLevel: [structuredClone({openLevel: 4, data: RiskLevel[risk_level], level: risk_level+1})],
       openText: [structuredClone({openLevel: 1, data:''})],
-      desc: [structuredClone(`${Condition[Math.floor(Math.random()*Condition.length)]}${Happen[Math.floor(Math.random()*Happen.length)]}`)],
-      specialTips: [{ openLevel: 1, data: "", cost: 1 }],
+      specialTips: [structuredClone({openLevel: 1, cost:Math.floor((Math.random()+1)*3), data:`${Condition[Math.floor(Math.random()*Condition.length)].ja}${Happen[Math.floor(Math.random()*Happen.length)].ja}`})],
+      desc: [structuredClone({openLevel: 1, data:`${Desk[Math.floor(Math.random()*Desk.length)].ja}`})],
     },
     skillInfo: {
       workProb: {
-        openCost: 1,
+        openCost: Math.floor((Math.random()+1)*3),
         Level1: structuredClone(initialRWBPInformation),
         Level2: structuredClone(initialRWBPInformation),
         Level3: structuredClone(initialRWBPInformation),
         Level4: structuredClone(initialRWBPInformation),
         Level5: structuredClone(initialRWBPInformation),
       },
-      narration_start: '',
-      narration_move: '',
-      narration: structuredClone(initialInformationArray),
-      qliphoth: 1,
-      feelingStateCubeBounds: { bad: 1, norm: 1, good: 1 },
-      workSpeed: 1,
-      workDamage: structuredClone(initialDamage),
-      workCooltime: 1,
-      observeBonus: [{ type: ObserveBonusType.prob, data: 1, level: 1 }, { type: ObserveBonusType.prob, data: 1, level: 2 }, { type: ObserveBonusType.prob, data: 1, level: 3 }, { type: ObserveBonusType.prob, data: 1, level: 4 }],
-      armor: { id: 1, level: 1, cost: 1 },
-      weapon: { id: 1, level: 1, cost: 1 },
-      gift: { id: 1, level: 1, prob: 1 },
+      narration_start: '作業を始める。',
+      narration_move: '作業部屋に入る。',
+      narration: [structuredClone({openLevel: 1, data:`ナレーション1`})],
+      qliphoth: Math.floor((Math.random()+0.3)*3),
+      feelingStateCubeBounds: { bad: max_cube*1, norm: max_cube*2, good: max_cube*3 },
+      workSpeed: Math.floor((Math.random())*20)/10,
+      workDamage: structuredClone({type: Math.floor(Math.random()*4), min:Math.floor(Math.random()*10), max:Math.floor(Math.random()*10)}),
+      workCooltime: Math.floor((Math.random()+1)*3),
+      observeBonus: [{ type: ObserveBonusType.prob, data: 4, level: 1 }, { type: ObserveBonusType.prob, data: 4, level: 2 }, { type: ObserveBonusType.prob, data: 4, level: 3 }, { type: ObserveBonusType.prob, data: 4, level: 4 }],
+      armor: { id: parseInt(IDGen()), level: 3, cost: Math.floor((Math.random()+12)*5) },
+      weapon: { id: parseInt(IDGen()), level: 4, cost: Math.floor((Math.random()+12)*5) },
+      gift: { id: parseInt(IDGen()), level: 3, prob: Math.floor(Math.random()*100)/100 },
     },
     escapeInfo: {
-      escapable: false,
-      defense: { data: structuredClone(initialRWBPInformation), cost: 1 },
+      escapable: Math.floor((Math.random()*2)) == 0 ? true:false,
+      defense: { data: structuredClone(initialRWBPInformation), cost: Math.floor((Math.random()+1)*3) },
       specialDamage: [structuredClone(initialDamage)],
-      HP: 1,
-      speed: 1,
-      animPrefab: '',
+      HP: Math.floor(Math.random()*100)+50,
+      speed: Math.floor(Math.random()*100)+50,
+      animPrefab: `${Adjective[adjective_index].en}${Name[name_index].en}Anim`,
     },
   }
 }
@@ -1044,10 +1049,6 @@ const AbnormalityForm: React.FC = () => {
             <input type="number" value={abnormality.escapeInfo.speed} onChange={(e) => handleChange(e, 'escapeInfo.speed')} />
           </label>
           <br />
-          <label>
-            アニメーションプレハブ (Anim Prefab):
-            <input type="text" value={abnormality.escapeInfo.animPrefab} onChange={(e) => handleChange(e, 'escapeInfo.animPrefab')} />
-          </label>
         </div>
       </form>
 
